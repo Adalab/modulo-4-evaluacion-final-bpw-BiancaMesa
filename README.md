@@ -1,21 +1,22 @@
+#Taylor Swift Songs & Albums API 
 
-**See all the song**
+**See all the song**  
 Front-end must: 
 - Use the method get
 - Use the route: /songs
 
-**See one song**
+**See one song**  
 Front-end must: 
 - Use the method get
 - Use the route: /songs/:id
 - Send as url params the id of the song you want to see.
 
-**See all the albums**
+**See all the albums**  
 Front-end must: 
 - Use the method get
 - Use the route: /albums
 
-**Add a new song**
+**Add a new song**  
 Front-end must: 
 - Use the method post
 - Use the route: /songs
