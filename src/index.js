@@ -177,22 +177,36 @@ server.put("/songs/:id", async (req, res) => {
                 error: "Please send the id of album"
             });
         } else {
-            //hacemos la query a la base datos; actualizamos la canción 
-            const modifySongQuerySQL = "UPDATE song SET songName = ?, musicVideo = ?, writtenBy = ?, fk_albumId = ? WHERE songId = ?";
-            const [modifySongResult] = await connection.query(modifySongQuerySQL, [
-                song, 
-                music_video, 
-                writers, 
-                album_id,
-                song_id
-            ]); 
 
-            console.log(modifySongResult);
+            //controlar el error de que el song_id que envía el usuario no existe en la base de datos
+            const checkSongIdQuerySQL = "SELECT * FROM song WHERE songId = ?"; 
+            const [songIdResult] = await connection.query(checkSongIdQuerySQL, [song_id]);
+            console.log('Song Id Result:', songIdResult);
 
-            //enviamos la respuesta a front
-            res.status(200).json({
-                success: true, 
-            });
+            //si no encuentra el song_id en la base de datos, nos devolverá un array vacío 
+            if(songIdResult.length === 0) {
+                res.status(404).json({
+                    status: "error", 
+                    error: "No song matches that id"
+                }); 
+            } else {
+                //hacemos la query a la base datos; actualizamos la canción 
+                const modifySongQuerySQL = "UPDATE song SET songName = ?, musicVideo = ?, writtenBy = ?, fk_albumId = ? WHERE songId = ?";
+                const [modifySongResult] = await connection.query(modifySongQuerySQL, [
+                    song, 
+                    music_video, 
+                    writers, 
+                    album_id,
+                    song_id
+                ]); 
+
+                console.log(modifySongResult);
+
+                //enviamos la respuesta a front
+                res.status(200).json({
+                    success: true, 
+                });
+            }
         }
     }
 })
