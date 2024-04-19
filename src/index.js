@@ -45,7 +45,7 @@ server.get("/songs", async (req, res) => {
     //hacemos las queries; consultamos la base de datos
     const querySongsSQL = "SELECT * FROM song"; 
     const [songsResult] = await connection.query(querySongsSQL); 
-    //console.log(songsResult); 
+    console.log(songsResult); 
 
     //cerramos la conexión
     connection.end();
