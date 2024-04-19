@@ -38,7 +38,12 @@ VALUES ("Midnights", "https://upload.wikimedia.org/wikipedia/en/9/9f/Midnights_-
 INSERT INTO album (albumName, cover, genre, releaseDate)
 VALUES ("Reputation", "https://m.media-amazon.com/images/I/91VnI1TRpxL._UF894,1000_QL80_.jpg", "Electropop, pop and synth-pop", "2017-11-10");
 
+INSERT INTO album (albumName, cover, genre, releaseDate)
+VALUES ("1989", "https://pbs.twimg.com/media/F3S1iBPboAA0tXz?format=jpg&name=4096x4096", "Electropop, pop and synth-pop", "2014-10-27");
+
 UPDATE song SET fk_albumId = 1 WHERE songId = 1;
 UPDATE song SET fk_albumId = 1 WHERE songId = 2;
 UPDATE song SET fk_albumId = 2 WHERE songId = 3;
 UPDATE song SET fk_albumId = 3 WHERE songId = 4;
+
+SELECT * FROM song WHERE songId = 2;

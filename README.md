@@ -2,6 +2,10 @@
 This is an API that contains information about the songs and the albums of Taylor Swift. 
 Moreover, not only can you consult that information but you can also add new songs and modify or delete the existing ones (if you see any mistake).
 
+**Website**
+https://taylor-swift-api-95us.onrender.com
+
+
 # Technologies Used 🏹 #
 - MySQL: to create the database 
 - Node.js
@@ -13,7 +17,15 @@ Moreover, not only can you consult that information but you can also add new son
 2. **Open the project using your code editor (Visual Studio Code or any other)**
 3. **Install node modules with all the local dependencies:**    
     ``` npm install ```
-4. **Start the project:**    
+4. **Create a data base using MySQL Workbench and run the file found in db/taylor_swift_db.sql**
+
+5. **Environment variables**  
+    Create a file in root named .env with the following environment variables: 
+    ```DB_PASSWORD = your_password_in_MySQLWorkbench```
+    ```DB_USER = your_user_in_your_MySQLWorkbench_connection```
+    ```PORT = the_port_you_want_to_use_locally```
+
+5. **Start the project:**    
     ``` npm run dev ```
 
 ## See all the songs 🌃💫## 
