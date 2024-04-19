@@ -16,7 +16,7 @@ server.use(express.json()); //usar json
 //nos conectamos a la base datos
 async function getDBConnection() {
     const connection = await mysql.createConnection({
-        host: "127.0.0.1", //localhost ????????
+        host: "127.0.0.1", 
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD, 
         database: "taylor_swift_db" , 
@@ -47,7 +47,7 @@ server.get("/songs", async (req, res) => {
     //hacemos las queries; consultamos la base de datos
     const querySongsSQL = "SELECT * FROM song"; 
     const [songsResult] = await connection.query(querySongsSQL); 
-    console.log(songsResult); 
+    //console.log(songsResult); 
 
     //cerramos la conexión
     connection.end();
@@ -67,7 +67,7 @@ server.get("/albums", async (req, res) => {
     //hacemos las queries; consultamos la base de datos
     const queryAlbumsSQL = "SELECT * FROM album"; 
     const [albumsResult] = await connection.query(queryAlbumsSQL); 
-    console.log(albumsResult); 
+    //console.log(albumsResult); 
 
     //cerramos la conexión
     connection.end();
@@ -77,4 +77,34 @@ server.get("/albums", async (req, res) => {
         info: {count: albumsResult.length}, 
         result: albumsResult, 
     });
+});
+
+//Endpoint para obtener una sóla canción a través de su id 
+server.get("/songs/:id", async (req, res) => {
+    //recogemos el id que nos envía front por url params
+    const song_id = req.params.id; 
+
+    //nos conectamos a la base de datos
+    const connection = await getDBConnection();
+
+    //hacemos el query a la base datos, que nos muestre la canción que se corresponda con el id que le hemos pasado
+    const querySongIdSQL = "SELECT * FROM song WHERE songId = ?"; 
+    const [songIdResult] = await connection.query(querySongIdSQL, [song_id]);
+    console.log(songIdResult);
+
+    //cerramos la conexión con la base datos
+    connection.end(); 
+
+    //devolvemos la respuesta
+    //si se introduce un id que no existe, nos devuelve un error
+    if(songIdResult.length === 0) {
+        res.status(404).json({
+            error: "There is no song with that id",
+        });
+    } else {
+        res.status(200).json({
+            success: true, 
+            result: songIdResult,
+        })
+    }
 });
