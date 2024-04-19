@@ -35,8 +35,6 @@ server.listen(port, () => {
     console.log(`Server is listening in port: ${port}`);
 });
 
-//IR HACIENDO MUCHOS CONSOLE LOG
-
 
 //ENDPOINTS 
 //Endpoint para pedir las canciones
@@ -195,4 +193,32 @@ server.put("/songs/:id", async (req, res) => {
             });
         }
     }
+})
+
+
+//Endpoint para eliminar una canción
+server.delete("/songs/:id", async (req, res) => {
+    //recogemos el id que nos envía front por url params
+    const song_id = req.params.id; 
+
+    //nos conectamos a la base de datos
+    const connection = await getDBConnection(); 
+
+    //hacer la query a la base de datos; eliminar una canción 
+    const deleteSongQuery = "DELETE FROM song WHERE songId = ?";
+    const [deleteSongResult] = await connection.query(deleteSongQuery, [song_id]);
+    console.log(deleteSongResult);
+
+    if(deleteSongResult.affectedRows > 0) {
+        res.status(200).json({
+            success: true, 
+            message: "Song deleted", 
+        })
+    } else {
+        res.status(400).json({
+            success: false, 
+            message: "The song has NOT been deleted"
+        })
+    }
+
 })
