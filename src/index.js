@@ -45,7 +45,6 @@ server.get("/songs", async (req, res) => {
     //hacemos las queries; consultamos la base de datos
     const querySongsSQL = "SELECT * FROM song"; 
     const [songsResult] = await connection.query(querySongsSQL); 
-    console.log(songsResult); 
 
     //cerramos la conexión
     connection.end();
@@ -65,7 +64,6 @@ server.get("/albums", async (req, res) => {
     //hacemos las queries; consultamos la base de datos
     const queryAlbumsSQL = "SELECT * FROM album"; 
     const [albumsResult] = await connection.query(queryAlbumsSQL); 
-    //console.log(albumsResult); 
 
     //cerramos la conexión
     connection.end();
@@ -137,7 +135,6 @@ server.post("/songs", async(req, res) => {
             writers, 
             album_id, //será la clave foránea
         ]);
-        console.log(newSongResult);
 
         //enviamos la respuesta a frontend
         res.status(201).json({
@@ -156,9 +153,7 @@ server.put("/songs/:id", async (req, res) => {
     //recogemos los datos que nos envía front por body params
     const modifySongData = req.body; 
     const {song, music_video, writers, album_id} = modifySongData;
-    console.log('El album_id es:', album_id);
     
-
     //abrimos la conexión con la base de datos
     const connection = await getDBConnection();
 
@@ -181,7 +176,6 @@ server.put("/songs/:id", async (req, res) => {
             //controlar el error de que el song_id que envía el usuario no existe en la base de datos
             const songIdCheckQuerySQL = "SELECT * FROM song WHERE songId = ?"; 
             const [songIdCheckResult] = await connection.query(songIdCheckQuerySQL, [song_id]);
-            console.log('Song Id Result:', songIdCheckResult);
 
             //si no encuentra el song_id en la base de datos, nos devolverá un array vacío 
             if(songIdCheckResult.length === 0) {
@@ -193,7 +187,6 @@ server.put("/songs/:id", async (req, res) => {
 
                 const albumIdCheckQuerySQL = "SELECT * FROM song WHERE fk_albumId = ?"; 
                 const [albumIdCheckResult] = await connection.query(albumIdCheckQuerySQL, [album_id]);
-                console.log('Song Id Result:', albumIdCheckResult);
 
                 if (albumIdCheckResult.length === 0) {
                     res.status(404).json({
@@ -210,8 +203,6 @@ server.put("/songs/:id", async (req, res) => {
                         album_id,
                         song_id
                     ]); 
-
-                    console.log(modifySongResult);
 
                     //enviamos la respuesta a front
                     res.status(200).json({
@@ -235,7 +226,6 @@ server.delete("/songs/:id", async (req, res) => {
     //hacer la query a la base de datos; eliminar una canción 
     const deleteSongQuery = "DELETE FROM song WHERE songId = ?";
     const [deleteSongResult] = await connection.query(deleteSongQuery, [song_id]);
-    console.log(deleteSongResult);
 
     if(deleteSongResult.affectedRows > 0) {
         res.status(200).json({
