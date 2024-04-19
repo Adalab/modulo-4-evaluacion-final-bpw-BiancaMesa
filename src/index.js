@@ -108,3 +108,43 @@ server.get("/songs/:id", async (req, res) => {
         })
     }
 });
+
+
+//Endpoint para añadir una canción nueva
+server.post("/songs", async(req, res) => {
+    //recogemos los datos que nos ha enviado front con la canción nueva
+    //destructuring: creamos un objeto nuevo que tenga toda la información que ha enviado front excepto por el nombre del album y una constante albumId que es el id del album al que pertenece que nos lo ha enviado front (la programadora, no la usuaria)
+    const {albumId, ...newSongTableData} = req.body; 
+    console.log('Info que recibimos de front:', req.body);
+    console.log('Info que meteremos en tabla song:', newSongTableData);
+    console.log('Album Id, clave foránea:', albumId); //number 
+
+    //destructuring para que quede más limpia la query
+    const {song, music_video, writers} = req.body;
+
+    //nos conectamos a la base datos
+    const connection = await getDBConnection();
+
+    if(!albumId) {
+        res.status(400).json({
+            status: "error", 
+            error: "Please introduce the album of the song"
+        });
+    } else {
+        //hacemos la query a la BD, le envíamos los datos de la canción nueva
+        const newSongQuerySQL = "INSERT INTO song (songName, musicVideo, writtenBy, fk_albumId) VALUES (?, ?, ?, ?)"
+        const [newSongResult] = await connection.query(newSongQuerySQL, [
+            song, 
+            music_video,
+            writers, 
+            albumId, //será la clave foránea
+        ]);
+        console.log(newSongResult);
+
+        //enviamos la respuesta a frontend
+        res.status(201).json({
+            success: true, 
+            id: newSongResult.insertId, 
+        })
+    }
+})
