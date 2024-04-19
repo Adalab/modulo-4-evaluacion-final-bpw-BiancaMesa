@@ -25,12 +25,9 @@ CREATE TABLE album (
 	albumId int auto_increment primary key,
     albumName VARCHAR (45) not null, 
     cover LONGTEXT, 
-    genre VARCHAR (45),
+    genre VARCHAR (100),
     releaseDate DATE
 );
-
-INSERT INTO album (albumName, cover, genre, releaseDate)
-VALUES ("Lover", "https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/Taylor_Swift_-_Lover.png/220px-Taylor_Swift_-_Lover.png", "Electropop, pop, rock and synth-pop", "2019-08-23");
 
 INSERT INTO album (albumName, cover, genre, releaseDate)
 VALUES ("Lover", "https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/Taylor_Swift_-_Lover.png/220px-Taylor_Swift_-_Lover.png", "Electropop, pop, rock and synth-pop", "2019-08-23");
@@ -40,3 +37,8 @@ VALUES ("Midnights", "https://upload.wikimedia.org/wikipedia/en/9/9f/Midnights_-
 
 INSERT INTO album (albumName, cover, genre, releaseDate)
 VALUES ("Reputation", "https://m.media-amazon.com/images/I/91VnI1TRpxL._UF894,1000_QL80_.jpg", "Electropop, pop and synth-pop", "2017-11-10");
+
+UPDATE song SET fk_albumId = 1 WHERE songId = 1;
+UPDATE song SET fk_albumId = 1 WHERE songId = 2;
+UPDATE song SET fk_albumId = 2 WHERE songId = 3;
+UPDATE song SET fk_albumId = 3 WHERE songId = 4;
