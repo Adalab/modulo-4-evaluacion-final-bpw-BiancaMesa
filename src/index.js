@@ -174,38 +174,50 @@ server.put("/songs/:id", async (req, res) => {
         if (!album_id) {
             res.status(400).json({
                 status: "error", 
-                error: "Please send the id of album"
+                error: "Please, send the id of album"
             });
         } else {
 
             //controlar el error de que el song_id que envía el usuario no existe en la base de datos
-            const checkSongIdQuerySQL = "SELECT * FROM song WHERE songId = ?"; 
-            const [songIdResult] = await connection.query(checkSongIdQuerySQL, [song_id]);
-            console.log('Song Id Result:', songIdResult);
+            const songIdCheckQuerySQL = "SELECT * FROM song WHERE songId = ?"; 
+            const [songIdCheckResult] = await connection.query(songIdCheckQuerySQL, [song_id]);
+            console.log('Song Id Result:', songIdCheckResult);
 
             //si no encuentra el song_id en la base de datos, nos devolverá un array vacío 
-            if(songIdResult.length === 0) {
+            if(songIdCheckResult.length === 0) {
                 res.status(404).json({
                     status: "error", 
                     error: "No song matches that id"
                 }); 
             } else {
-                //hacemos la query a la base datos; actualizamos la canción 
-                const modifySongQuerySQL = "UPDATE song SET songName = ?, musicVideo = ?, writtenBy = ?, fk_albumId = ? WHERE songId = ?";
-                const [modifySongResult] = await connection.query(modifySongQuerySQL, [
-                    song, 
-                    music_video, 
-                    writers, 
-                    album_id,
-                    song_id
-                ]); 
 
-                console.log(modifySongResult);
+                const albumIdCheckQuerySQL = "SELECT * FROM song WHERE fk_albumId = ?"; 
+                const [albumIdCheckResult] = await connection.query(albumIdCheckQuerySQL, [album_id]);
+                console.log('Song Id Result:', albumIdCheckResult);
 
-                //enviamos la respuesta a front
-                res.status(200).json({
-                    success: true, 
-                });
+                if (albumIdCheckResult.length === 0) {
+                    res.status(404).json({
+                        status: "error", 
+                        error: "There is no album with that id, please send one that exists"
+                    }); 
+                } else {
+                    //hacemos la query a la base datos; actualizamos la canción 
+                    const modifySongQuerySQL = "UPDATE song SET songName = ?, musicVideo = ?, writtenBy = ?, fk_albumId = ? WHERE songId = ?";
+                    const [modifySongResult] = await connection.query(modifySongQuerySQL, [
+                        song, 
+                        music_video, 
+                        writers, 
+                        album_id,
+                        song_id
+                    ]); 
+
+                    console.log(modifySongResult);
+
+                    //enviamos la respuesta a front
+                    res.status(200).json({
+                        success: true, 
+                    });
+                }
             }
         }
     }
