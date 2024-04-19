@@ -162,17 +162,19 @@ server.put("/songs/:id", async (req, res) => {
     //abrimos la conexión con la base de datos
     const connection = await getDBConnection();
 
-    //controlar errores
+    //control de errores
+    //si el usuario no envía ningún id
     if(!song_id) {
         res.status(400).json({
             status: "error", 
-            error: "No song matches that id"
+            error: "Please, send the id of the song you will like to see"
         }); 
     } else {
+        //si el usuario no envía ningún id para el album
         if (!album_id) {
             res.status(400).json({
                 status: "error", 
-                error: "Please introduce the album of the song"
+                error: "Please send the id of album"
             });
         } else {
             //hacemos la query a la base datos; actualizamos la canción 
